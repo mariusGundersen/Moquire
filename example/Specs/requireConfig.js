@@ -5,4 +5,6 @@ var requireConfig = {
     }
 };
 
-require.config(requireConfig);
+require.config(
+	moquire.config(requireConfig)
+);
