@@ -11,7 +11,7 @@ Below are some example use cases. Have a look at the example directory on how to
 
 The following shows how to use moquire as a drop in replacement for require. 
 
-```
+```javascript
 moquire(["dependency1", "dependency2"], function(dep1, dep2){
   //do something with dep1 and dep2
 });
@@ -21,7 +21,7 @@ moquire(["dependency1", "dependency2"], function(dep1, dep2){
 
 Simple modules which don't have any dependencies can be mocked inline:
 
-```
+```javascript
 //This module abstracts away the ajaxLib from the main application
 define("backend", ["ajaxLib"], function(ajaxLib){
   return{
@@ -53,7 +53,7 @@ moquire({
 
 You can place the mock module in another file, and require will find it for you
 
-```
+```javascript
 //This could be in another file, named backendMock.js
 define("backendMock", [], function(){
   return{
@@ -74,7 +74,7 @@ moquire({ "backend":"backendMock"},["businessLogic"], function(businessLogic){
 
 You can place the mock module in another file, and require will find it for you
 
-```
+```javascript
 moquire({
   "businessLogic1": {
     "backend":"backendMock"
