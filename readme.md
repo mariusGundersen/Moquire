@@ -31,6 +31,20 @@ define("backend", ["ajaxLib"], function(ajaxLib){
   };
 });
 
+//This module lets you increment a value and send the result to the server
+define("businessLogic1", ["backend"], function(backend){
+  return {
+    value: 0,
+    incrementValue: function(){
+      this.value++;
+      //it uses the backend module to send data to the server
+      backend.sendToServer(this.value+1, function(){
+        console.log("success");
+      });
+    }
+  };
+});
+
 moquire({
   //define a mock of backend which doesn't contact the server 
   //(no need to contact the server during desting)
