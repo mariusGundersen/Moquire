@@ -1,0 +1,20 @@
+{
+	"name": "moquirejs",
+	"description": "mock require dependencies",
+	"keywords": ["require", "mock"],
+	"author": {
+		"name": "Marius Gundersen",
+		"email": "npm@mariusgundersen.net",
+		"url": "http://mariusgundersen.net"
+	},
+	"version": "0.1.0",	
+	"devDependencies": {
+		"karma": "latest",
+		"closurecompiler": "latest"
+	},
+	"repository": {
+		"type": "git",
+		"url": "http://github.com/mariusgundersen/moquire"
+	}
+
+}
