@@ -1,0 +1,1 @@
+node_modules\.bin\ccjs.cmd source\moquire.js --create_source_map=bin\moquire.min.js.map > bin\moquire.min.js

@@ -23,11 +23,11 @@ var moquire = (function(){
 		return Array.prototype.map.call(array, typeOf);
 	}
 	
-	function testArguments(arguments, expectedTypes){
-		if(arguments.length != expectedTypes.length){
+	function testArguments(args, expectedTypes){
+		if(args.length != expectedTypes.length){
 			return false;
 		}
-		var givenTypes = typeOfArray(arguments);
+		var givenTypes = typeOfArray(args);
 		
 		return expectedTypes.every(function(expectedType, i){
 			return expectedType == givenTypes[i];
