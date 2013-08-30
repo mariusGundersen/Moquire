@@ -4,8 +4,10 @@ var moquire = (function(){
 	var requirementsRemaining = 0;
 	var requirementsLoaded = 0;
 	var requireConfig = {};
-
 	var contextCounter = 0;
+	var contextCreatedEventListeners = [];
+  
+  
 	function createContextName(){
 		return "context" + (contextCounter++);
 	}
@@ -44,6 +46,25 @@ var moquire = (function(){
 			target[p] = source[p];
 		}
 		return target;
+	}
+
+	function createRequireContext(config, then){
+		var requireContext = require.config(config);
+		var doneContextCreatedEventListeners = 0;
+
+		function done(){
+			doneContextCreatedEventListeners++;
+			if(doneContextCreatedEventListeners === contextCreatedEventListeners.length){
+				then(requireContext);
+			}
+		}
+		if(contextCreatedEventListeners.length == 0){
+			then(requireContext);
+		}else{
+			contextCreatedEventListeners.forEach(function(listener){
+				listener(requireContext, done);
+			});
+		}
 	}
 	
 	function createModule(name, factory){
@@ -88,8 +109,9 @@ var moquire = (function(){
 	function requireWithMap(map, dependencies, factory){
 		var config = extendConfig(requireConfig, createContextName(), createMap(map));
 
-		var mappedRequire = require.config(config);
-		callRequire(mappedRequire, dependencies, factory);
+		createRequireContext(config, function(mappedRequire){
+			callRequire(mappedRequire, dependencies, factory);
+		});
 	}
 	
 	function requireWithoutMap(dependencies, factory){
@@ -121,6 +143,18 @@ var moquire = (function(){
 			whenDone = callback;
 		}
 	}
+  
+	moquire.onContextCreated = function(listener){
+		contextCreatedEventListeners.push(listener);
+	};
+
+	moquire.onContextCreated.dont = function(listener){
+		var index = contextCreatedEventListeners.indexOf(listener);
+
+		if(index >= 0){
+			contextCreatedEventListeners.splice(index, 1);
+		}
+	};
 	
 	return moquire;
 
