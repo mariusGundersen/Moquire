@@ -9,12 +9,12 @@ var moquire = (function(){
   
   
 	function createContextName(){
-		return "context" + (contextCounter++);
+		return "$__MoquireContext" + (contextCounter++) + "__$";
 	}
 	
 	var moduleCounter = 0;
 	function createModuleName(){
-		return "module" + (moduleCounter++);
+		return "$__MoquireModule" + (moduleCounter++) + "__$";
 	}
 	
 	function typeOf(obj) {
@@ -67,36 +67,42 @@ var moquire = (function(){
 		}
 	}
 	
-	function createModule(name, factory){
-		define(name, [], factory);
+	function createModule(replacement, original, factory){
+		define(replacement, [original], factory);
+	}
+
+	function addReplacementToMap(map, scope, original, replacement){
+		map[scope] = map[scope] || {};
+		map[scope][original] = replacement;
+		map[replacement] = {};
+		map[replacement][original] = original;
+		map[replacement]["__mocked__"] = original;
 	}
 	
-	function createMap(map, levelTwo){
-		var twoLevels = false;
-		for(var key in map){
-			var val = map[key];
-			if(typeof val === "function"){
-				var name = createModuleName();
-				createModule(name, val);
-				map[key] = name;
-			} else if (typeof val === "object"){
-				twoLevels = true;
-				map[key] = createMap(val, true);
+	function createMap(inputMap, outputMap, scope){
+		outputMap = outputMap || {};
+		scope = scope || '*';
+		for(var original in inputMap){
+			var replacement = inputMap[original];
+			if(typeof replacement === "function"){
+				var replacementName = createModuleName();
+				createModule(replacementName, original, replacement);
+				addReplacementToMap(outputMap, scope, original, replacementName);
+			} else if (typeof replacement === "object"){
+				createMap(replacement, outputMap, original);
+			} else {
+				addReplacementToMap(outputMap, scope, original, replacement);
 			}
 		}
-		if(twoLevels === false && levelTwo !== true){
-			map = {'*': map};
-		}
-		return map;
+		return outputMap;
 	}
 
-
-    function requirementLoaded(){
-      requirementsLoaded++;
-      if(requirementsLoaded == requirementsRemaining && typeof whenDone == "function"){
-        whenDone();
-      }
+  function requirementLoaded(){
+    requirementsLoaded++;
+    if(requirementsLoaded == requirementsRemaining && typeof whenDone == "function"){
+      whenDone();
     }
+  }
 
 	function callRequire(method, dependencies, factory){
 		requirementsRemaining++;
