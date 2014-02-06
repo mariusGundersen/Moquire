@@ -75,4 +75,15 @@ describe("when called with an object", function(){
 			});
 		});
 	});
+	
+	describe("when the global require config map is used", function(){
+		new AsyncSpec(this).it("should load the value file as a mock", function(done){
+			moquire({
+				"module1" : "mock1"
+			}, ["test"], function(module2){
+				expect(module2.module1.name).toBe("mock1");
+				done();
+			});
+		});
+	});
 });

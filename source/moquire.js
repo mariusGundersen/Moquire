@@ -1,4 +1,4 @@
-var moquire = (function(){
+var moquire = (function(require){
 
 	var whenDone = function(){};
 	var requirementsRemaining = 0;
@@ -35,21 +35,29 @@ var moquire = (function(){
 			return expectedType == givenTypes[i];
 		});
 	}
+
+
+	function cloneObjectInto(b, a){
+		for(var prop in b){
+			if (typeof b[prop] === 'object') {
+        a[prop] = a[prop] !== undefined ? a[prop] : {};
+        cloneObjectInto(b[prop], a[prop]);
+      } else {
+        a[prop] = b[prop];
+      }
+		}
+	}
 	
 	function extendConfig(source, name, map){
-		var target = {
-			context: name,
-			map: map
-		};
-	
-		for(var p in source){
-			target[p] = source[p];
-		}
+		var target = {};	
+		cloneObjectInto(source, target);
+		cloneObjectInto({map:map}, target);
+		cloneObjectInto({context:name}, target);
 		return target;
 	}
 
 	function createRequireContext(config, then){
-		var requireContext = require.config(config);
+		var requireContext = moquire.require.config(config);
 		var doneContextCreatedEventListeners = 0;
 
 		function done(){
@@ -121,7 +129,7 @@ var moquire = (function(){
 	}
 	
 	function requireWithoutMap(dependencies, factory){
-		callRequire(require, dependencies, factory);
+		callRequire(moquire.require, dependencies, factory);
 	}
 	
 	function moquire(arg0, arg1, arg2){
@@ -161,7 +169,9 @@ var moquire = (function(){
 			contextCreatedEventListeners.splice(index, 1);
 		}
 	};
+
+	moquire.require = require;
 	
 	return moquire;
 
-})();
+})(require);

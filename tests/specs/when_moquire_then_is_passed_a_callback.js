@@ -4,7 +4,7 @@ describe("when moquire.then is passed a callback", function(){
 		factorySpy;
 
 	beforeEach(function(){
-		requireSpy = sinon.stub(window, "require"); 
+		requireSpy = sinon.stub(moquire, "require"); 
 		factorySpy = sinon.spy();
 	});
 
