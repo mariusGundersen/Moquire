@@ -1,13 +1,13 @@
-#Moquire#
+#Moquire
 
-##mock the dependencies of AMD modules when testing##
+##mock the dependencies of AMD modules when testing
 
 This is a simple JavaScript project for mocking AMD modules, which is useful when testing the functionality and behaviour of individual modules.
 Moquire is designed to work like the require method provided by [require.js](http://www.requirejs.org/), taking an optional first argument which is an object of mocked modules.
 
-Below are some example use cases. Have a look at the example directory on how to set everything up to work for a large project.
+Below are some example use cases. Have a look at the tests directory on how to set everything up to work for a large project.
 
-###Function exactly the same as require###
+###Function exactly the same as require
 
 The following shows how to use moquire as a drop in replacement for require. 
 
@@ -17,7 +17,7 @@ moquire(["dependency1", "dependency2"], function(dep1, dep2){
 });
 ```
 
-###Replace dependency with custom module###
+###Replace dependency with custom module
 
 Simple modules which don't have any dependencies can be mocked inline:
 
@@ -63,7 +63,7 @@ moquire({
 ```
 
 
-###Replace dependency with another module###
+###Replace dependency with another module
 
 You can place the mock module in another file, and require will find it for you
 
@@ -84,7 +84,7 @@ moquire({ "backend":"backendMock"},["businessLogic"], function(businessLogic){
 });
 ```
 
-###Replace dependency for only some objects###
+###Replace dependency for only some objects
 
 You can place the mock module in another file, and require will find it for you
 
@@ -97,4 +97,15 @@ moquire({
   //Only businessLogic1 will have it's backend module replaced with backendMock. 
   //businessLogic2 will have the original backend module
 });
+```
+
+###Configuration
+
+For the mocking to work correctly, moquire needs the same configuration as require.
+The best way to ensure this is to configure everything the following way:
+
+```javascript
+require.config(moquire.config({
+    //The usual requireJS configuration
+}));
 ```

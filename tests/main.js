@@ -1,10 +1,8 @@
-require.config(
-	moquire.config({
-		baseUrl:"/base/tests/modules",
+require.config(moquire.config({
+    baseUrl: "/base/tests/modules",
     map: {
-      '*': {
-        'test':'module2'
-      }
+        '*': {
+            'test': 'module2'
+        }
     }
-	})
-);
+}));
