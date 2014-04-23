@@ -39,7 +39,10 @@ var moquire = (function(require){
 
   function cloneObjectInto(b, a){
     for(var prop in b){
-      if (typeof b[prop] === 'object') {
+      if(Object.prototype.toString.call( b[prop] ) === '[object Array]'){
+        a[prop] = a[prop] !== undefined ? a[prop] : [];
+        cloneObjectInto(b[prop], a[prop]);
+      }else if (typeof b[prop] === 'object') {
         a[prop] = a[prop] !== undefined ? a[prop] : {};
         cloneObjectInto(b[prop], a[prop]);
       } else {
