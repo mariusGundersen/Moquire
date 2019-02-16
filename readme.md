@@ -1,27 +1,27 @@
-#Moquire
+# Moquire
 
-##mock the dependencies of AMD modules when testing
+## mock the dependencies of AMD modules when testing
 
 This is a simple JavaScript project for mocking AMD modules, which is useful when testing the functionality and behaviour of individual modules.
 Moquire is designed to work like the require method provided by [require.js](http://www.requirejs.org/), taking an optional first argument which is an object of mocked modules.
 
 Below are some example use cases. Have a look at the tests directory on how to set everything up to work for a large project.
 
-###Function exactly the same as require
+### Function exactly the same as require
 
 The following shows how to use moquire as a drop in replacement for require. 
 
-```javascript
+```js
 moquire(["dependency1", "dependency2"], function(dep1, dep2){
   //do something with dep1 and dep2
 });
 ```
 
-###Replace dependency with custom module
+### Replace dependency with custom module
 
 Simple modules which don't have any dependencies can be mocked inline:
 
-```javascript
+```js
 //This module abstracts away the ajaxLib from the main application
 define("backend", ["ajaxLib"], function(ajaxLib){
   return{
@@ -63,11 +63,11 @@ moquire({
 ```
 
 
-###Replace dependency with another module
+### Replace dependency with another module
 
 You can place the mock module in another file, and require will find it for you
 
-```javascript
+```js
 //This could be in another file, named backendMock.js
 define("backendMock", [], function(){
   return{
@@ -84,11 +84,11 @@ moquire({ "backend":"backendMock"},["businessLogic"], function(businessLogic){
 });
 ```
 
-###Replace dependency for only some objects
+### Replace dependency for only some objects
 
 You can place the mock module in another file, and require will find it for you
 
-```javascript
+```js
 moquire({
   "businessLogic1": {
     "backend":"backendMock"
@@ -99,12 +99,12 @@ moquire({
 });
 ```
 
-###Configuration
+### Configuration
 
 For the mocking to work correctly, moquire needs the same configuration as require.
 The best way to ensure this is to configure everything the following way:
 
-```javascript
+```js
 require.config(moquire.config({
     //The usual requireJS configuration
 }));
